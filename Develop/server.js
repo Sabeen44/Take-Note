@@ -60,3 +60,30 @@ app.post("/api/notes", (req, res) => {
     });
   }
 });
+
+app.delete("/api/notes/:id", (req, res) => {
+  // reading notes form db.json
+  const id = req.params.id;
+
+  fs.readFile(`./db/db.json`, "utf8", (err, data) => {
+    if (err) console.log(err);
+    else {
+      const notesArray = JSON.parse(data);
+      const newNotes = notesArray.filter((note) => note.id !== id);
+      fs.writeFile("db/db.json", JSON.stringify(newNotes, null, 4), (err) => {
+        if (err) console.log(err);
+        else {
+          console.log("note deleted");
+        }
+      });
+    }
+  });
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/public/index.html"));
+});
+
+app.listen(PORT, () =>
+  console.log(`App listening at http://localhost:${PORT}`)
+);
