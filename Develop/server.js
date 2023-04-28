@@ -2,7 +2,6 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const notes = require("./db/db.json");
-//var uniqid = require("uniqid");
 const uuid = require("./public/assets/uuid");
 
 const app = express();
@@ -15,7 +14,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
+  res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
 app.get("/notes", (req, res) => {
@@ -31,7 +30,7 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-  console.info(`${req.method} request received to add a note`);
+  //console.info(`${req.method} request received to add a note`);
   const { title, text } = req.body;
   if (title && text) {
     const newNote = {
@@ -39,7 +38,7 @@ app.post("/api/notes", (req, res) => {
       text,
       id: uuid(),
     };
-    //const newNote = req.body;
+
     fs.readFile(`./db/db.json`, "utf8", (err, data) => {
       if (err) console.log(err);
       else {
